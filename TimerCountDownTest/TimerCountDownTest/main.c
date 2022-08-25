@@ -54,26 +54,19 @@ PE1 - SCL
 #include <avr/interrupt.h>
 #include "Clock/sysclock.h"
 #include "Driver/driver.h"
+#include "INTERFACE/interface.h"
 
 
 int main(void)
 {
 	ClkSys32MHz();
-	sterownik = Driver_Init(sterownik, &TCC1, &PORTC, 200, 16, 1.0);
-	//sterownik->DriverPort->OUTCLR = (1<<sterownik->PulsePin);
-	sterownik->DriverPort->OUTSET = (1<<sterownik->EnablePin);
-	//sterownik->DriverPort->OUTCLR = (1<<sterownik->EnablePin);
-	/*                              D  A   S */
-	Driver_SetParameters(sterownik, 0, 180, 200);
-	PMIC.CTRL = PMIC_LOLVLEN_bm;
-	sei();
-	_delay_ms(3000);
-	sterownik->DriverPort->OUTCLR = (1<<sterownik->EnablePin);
-    //Driver_Run(sterownik);
+	
+	driver1_1 = Driver1Init(driver1_1);
+	driver1_2 = Driver1Init(driver1_2);
+	driver2_1 = Driver2Init(driver2_1);
+	
     while (1) 
     {
-		//Driver_Run(sterownik);
-		//_delay_ms(15000);
 		
     }
 }

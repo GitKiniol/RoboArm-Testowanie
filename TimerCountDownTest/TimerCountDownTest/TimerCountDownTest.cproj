@@ -178,6 +178,12 @@
     <Compile Include="Driver\driver.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="INTERFACE\interface.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="INTERFACE\interface.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -186,6 +192,7 @@
     <Folder Include="Clock" />
     <Folder Include="Driver" />
     <Folder Include="Acceleration" />
+    <Folder Include="INTERFACE" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

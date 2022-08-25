@@ -8,5 +8,7 @@ Clock\sysclock.c
 
 Driver\driver.c
 
+INTERFACE\interface.c
+
 main.c
 
