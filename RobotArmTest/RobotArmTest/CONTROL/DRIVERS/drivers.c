@@ -28,12 +28,12 @@ to_run_list_t *drvToRunList;							/* lista driverów przydzielona do zadania				
 
 void Driver_AxisInit(void)
 {
-	axisA = Driver_StepperDriverInit(axisA, &TCF1, &PORTF, 200, 16, 1);	
-	axisA->MaximumPosition = axisA->Convert(90, axisA);
-	axisA->MinimumPosition = axisA->Convert(-90, axisA);
-	axisB = Driver_StepperDriverInit(axisB, &TCE1, &PORTE, 200, 16, 1);
-	axisB->MaximumPosition = axisB->Convert(90, axisB);
-	axisB->MinimumPosition = axisB->Convert(-90, axisB);
+	//axisA = Driver_StepperDriverInit(axisA, &TCF1, &PORTF, 200, 16, 1);	
+	//axisA->MaximumPosition = axisA->Convert(90, axisA);
+	//axisA->MinimumPosition = axisA->Convert(-90, axisA);
+	//axisB = Driver_StepperDriverInit(axisB, &TCE1, &PORTE, 200, 16, 1);
+	//axisB->MaximumPosition = axisB->Convert(90, axisB);
+	//axisB->MinimumPosition = axisB->Convert(-90, axisB);
 	axisC = Driver_StepperDriverInit(axisC, &TCD1, &PORTD, 200, 16, 1);
 	axisC->MaximumPosition = axisC->Convert(90, axisC);
 	axisC->MinimumPosition = axisC->Convert(-90, axisC);
@@ -373,7 +373,7 @@ void Driver_StepperTimerIsr(stepper_driver_t *driver)
 		zr = axisZ->IsRunning;	
 		if (ar == 0 && br == 0 && cr== 0 && zr == 0)								/* sprawdzenie czy jeszcze pracuje któraœ z osi, jeœli nie to:							*/
 		{
-			Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
+//			Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
 		}		
 	}
 }
@@ -393,13 +393,13 @@ ISR(TCD1_OVF_vect)
 	Driver_StepperTimerIsr(axisC);
 }
 
-ISR(TCE1_OVF_vect)
-{
-	Driver_StepperTimerIsr(axisB);
-}
-
-ISR(TCF1_OVF_vect)
-{
-	Driver_StepperTimerIsr(axisA);
-}
+//ISR(TCE1_OVF_vect)
+//{
+	//Driver_StepperTimerIsr(axisB);
+//}
+//
+//ISR(TCF1_OVF_vect)
+//{
+	//Driver_StepperTimerIsr(axisA);
+//}
 /*----------------------------------------------------------------------------------------------------------------------------------*/

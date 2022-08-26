@@ -86,33 +86,7 @@ char *Usart_GetString(char znak)
 
 /*---------------------------PRZERWANIA-----------------------------------------------------------------------------------------------------------------*/
 
-//ISR(USARTD1_DRE_vect)
-//{
-	//static uint8_t i = 0;																					/* licznik znaków														*/
-	//if (!SendingString[i] || (SendingString[i] < 32 && SendingString[i] != 10 && SendingString[i] != 13))	/* jeœli znak NUL lub niedrukowalny to zakoñcz wysy³anie				*/
-	//{
-		//RS232Port->DATA = 0;																				/* wyœlij NUL, znak koñcz¹cy ³añcuch									*/
-		//RS232Port->CTRLA &= ~(USART_DREINTLVL1_bm);															/* zablokowanie przerwania data reg empty								*/
-		//i = 0;																								/* zerowanie licznik znaków												*/
-	//}
-	//else																									/* jeœli aktualny znak to liczba lub litera t:							*/
-	//{
-		//RS232Port->DATA = SendingString[i++];																/* wyœlij znak															*/
-	//}
-//}
-//
-//ISR(USARTD1_RXC_vect)
-//{
-	//char c = RS232Port->DATA;																				/* pobierz znak z usart													*/
-	//ReceivedString = Usart_GetString(c);																	/* utwórz ³añcuch z odebranych znaków									*/
-	//if (ReceivedString != NULL)																				/* jeœli ³añcuch znaków nie jest pusty to:								*/
-	//{
-		//Buffer_InsertString(ReceivingBuffer, ReceivedString);												/* dodaj ³añcuch do bufora odbiorczego									*/
-		//ReceivedString = NULL;																				/* zeruj ³añcuch odbiorczy												*/
-	//}
-//}
-
-ISR(USARTD0_DRE_vect)
+ISR(USARTD1_DRE_vect)
 {
 	static uint8_t i = 0;																					/* licznik znaków														*/
 	if (!SendingString[i] || (SendingString[i] < 32 && SendingString[i] != 10 && SendingString[i] != 13))	/* jeœli znak NUL lub niedrukowalny to zakoñcz wysy³anie				*/
@@ -127,7 +101,7 @@ ISR(USARTD0_DRE_vect)
 	}
 }
 
-ISR(USARTD0_RXC_vect)
+ISR(USARTD1_RXC_vect)
 {
 	char c = RS232Port->DATA;																				/* pobierz znak z usart													*/
 	ReceivedString = Usart_GetString(c);																	/* utwórz ³añcuch z odebranych znaków									*/
@@ -137,6 +111,32 @@ ISR(USARTD0_RXC_vect)
 		ReceivedString = NULL;																				/* zeruj ³añcuch odbiorczy												*/
 	}
 }
+
+//ISR(USARTD0_DRE_vect)
+//{
+	//static uint8_t i = 0;																					/* licznik znaków														*/
+	//if (!SendingString[i] || (SendingString[i] < 32 && SendingString[i] != 10 && SendingString[i] != 13))	/* jeœli znak NUL lub niedrukowalny to zakoñcz wysy³anie				*/
+	//{
+		//RS232Port->DATA = 0;																				/* wyœlij NUL, znak koñcz¹cy ³añcuch									*/
+		//RS232Port->CTRLA &= ~(USART_DREINTLVL1_bm);															/* zablokowanie przerwania data reg empty								*/
+		//i = 0;																								/* zerowanie licznik znaków												*/
+	//}
+	//else																									/* jeœli aktualny znak to liczba lub litera t:							*/
+	//{
+		//RS232Port->DATA = SendingString[i++];																/* wyœlij znak															*/
+	//}
+//}
+//
+//ISR(USARTD0_RXC_vect)
+//{
+	//char c = RS232Port->DATA;																				/* pobierz znak z usart													*/
+	//ReceivedString = Usart_GetString(c);																	/* utwórz ³añcuch z odebranych znaków									*/
+	//if (ReceivedString != NULL)																				/* jeœli ³añcuch znaków nie jest pusty to:								*/
+	//{
+		//Buffer_InsertString(ReceivingBuffer, ReceivedString);												/* dodaj ³añcuch do bufora odbiorczego									*/
+		//ReceivedString = NULL;																				/* zeruj ³añcuch odbiorczy												*/
+	//}
+//}
 
 
 /*----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

@@ -16,7 +16,7 @@
 
 /*-------------------------------------------Deklaracje zmiennych-------------------------------------------------------------------------------------------*/
 /* EXTERN: */
-TC0_t *RunTaskTimer = &TCF0;												/* timer taktuj¹cy wykonywanie zadañ											*/
+//TC0_t *RunTaskTimer = &TCF0;												/* timer taktuj¹cy wykonywanie zadañ											*/
 
 /* LOCAL:  */
 uint8_t IsJobInProgress = 0;												/* czy trwa wykonywanie pracy (sekwencji zadañ) ?								*/
@@ -67,13 +67,13 @@ uint8_t Work_GetParameters(list_t *list)
 
 void Work_RunRobot(void)
 {
-	Work_TimerInit(RunTaskTimer);												/* inicjalizacje timera														*/
-	Work_TimerStart(RunTaskTimer);												/* uruchomienie timera														*/
+	//Work_TimerInit(RunTaskTimer);												/* inicjalizacje timera														*/
+	//Work_TimerStart(RunTaskTimer);												/* uruchomienie timera														*/
 }
 
 void Work_StopRobot(void)
 {
-	Work_TimerStop(RunTaskTimer);												/* zatrzymanie timera														*/
+	//Work_TimerStop(RunTaskTimer);												/* zatrzymanie timera														*/
 	Driver_EmergencyStop();														/* zatrzymanie robota														*/
 }
 
@@ -111,15 +111,15 @@ void Work_RunTask(list_t *joblist, uint8_t(*sendstatus)(char *))
 
 /*---------------------------------------------------------------przerwania---------------------------------------------------------------------------------*/
 
-ISR(TCF0_OVF_vect)
-{
-	static uint16_t x = 0;
-	if (x >= 32000 || IsJobInProgress == 0)
-	{
-		IsTaskInProgress = 0;
-		Work_TimerStop(&TCF0);
-		Work_RunTask(Job, &HC05_SendStatus);
-		x = 1;
-	}
-	x++;
-}
+//ISR(TCF0_OVF_vect)
+//{
+	//static uint16_t x = 0;
+	//if (x >= 32000 || IsJobInProgress == 0)
+	//{
+		//IsTaskInProgress = 0;
+		//Work_TimerStop(&TCF0);
+		//Work_RunTask(Job, &HC05_SendStatus);
+		//x = 1;
+	//}
+	//x++;
+//}

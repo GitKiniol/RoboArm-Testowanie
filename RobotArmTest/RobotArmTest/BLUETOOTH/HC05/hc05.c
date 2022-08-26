@@ -26,8 +26,8 @@ bluetooth_t *HC05_Init(bluetooth_t *module)
 {
 	module = (bluetooth_t *)malloc(sizeof(bluetooth_t));				/* alokacja pamiêci dla modu³u bluetooth				*/
 	ReceivingBuffer = Buffer_Init(ReceivingBuffer, RECEIVE_MAX_CHARS);	/*inicjalizacja bufora odbiorczego						*/
-		//Usart_Init(&USARTD1, &PORTD, PIN7_bp, PIN6_bp);					/* inicjalizacja sprzêtowego uart'u						*/
-		Usart_Init(&USARTD0, &PORTD, PIN3_bp, PIN2_bp);					/* inicjalizacja sprzêtowego uart'u						*/
+		Usart_Init(&USARTD1, &PORTD, PIN7_bp, PIN6_bp);					/* inicjalizacja sprzêtowego uart'u						*/
+		//Usart_Init(&USARTD0, &PORTD, PIN3_bp, PIN2_bp);					/* inicjalizacja sprzêtowego uart'u						*/
 		
 	ReceivingFrame = Frame_Init(ReceivingFrame);						/* inicjalizacja obs³ugi ramek danych					*/
 	module->Read = &HC05_Read;											/* ustawienie wskaŸnika na funkcjê odbiorcz¹			*/
