@@ -2450,7 +2450,7 @@ void Driver_SetStepperSpeed(stepper_driver_t *driver, uint8_t speed)
     105a:	df 93       	push	r29
     105c:	ec 01       	movw	r28, r24
     105e:	16 2f       	mov	r17, r22
-	//Er - przek³adnia elektryczna(podzia³ kroku, ustawiany switchami)
+	//Er - przek³adnia elektryczna(podzia³ kroku, ustawiany switch'ami)
 	//Mr - prze³o¿enie mechaniczne wynikaj¹ce ze œrednic kó³ zêbatych
 	
 	float ir = 0.0;
@@ -2474,18 +2474,17 @@ void Driver_SetStepperSpeed(stepper_driver_t *driver, uint8_t speed)
     1080:	0e 94 25 10 	call	0x204a	; 0x204a <__mulsf3>
     1084:	6b 01       	movw	r12, r22
     1086:	7c 01       	movw	r14, r24
-	fo = (speed / 60) * ir;															/*obliczenie czêstotliwoœci wyjœciowej sterownika programowego			*/
-    1088:	69 e8       	ldi	r22, 0x89	; 137
-    108a:	16 9f       	mul	r17, r22
-    108c:	61 2d       	mov	r22, r1
-    108e:	11 24       	eor	r1, r1
-    1090:	62 95       	swap	r22
-    1092:	66 95       	lsr	r22
-    1094:	67 70       	andi	r22, 0x07	; 7
-    1096:	70 e0       	ldi	r23, 0x00	; 0
-    1098:	80 e0       	ldi	r24, 0x00	; 0
-    109a:	90 e0       	ldi	r25, 0x00	; 0
-    109c:	0e 94 99 0f 	call	0x1f32	; 0x1f32 <__floatsisf>
+	fo = (speed / 60.0) * ir;															/*obliczenie czêstotliwoœci wyjœciowej sterownika programowego			*/
+    1088:	61 2f       	mov	r22, r17
+    108a:	70 e0       	ldi	r23, 0x00	; 0
+    108c:	80 e0       	ldi	r24, 0x00	; 0
+    108e:	90 e0       	ldi	r25, 0x00	; 0
+    1090:	0e 94 99 0f 	call	0x1f32	; 0x1f32 <__floatsisf>
+    1094:	20 e0       	ldi	r18, 0x00	; 0
+    1096:	30 e0       	ldi	r19, 0x00	; 0
+    1098:	40 e7       	ldi	r20, 0x70	; 112
+    109a:	52 e4       	ldi	r21, 0x42	; 66
+    109c:	0e 94 ef 0e 	call	0x1dde	; 0x1dde <__divsf3>
     10a0:	9b 01       	movw	r18, r22
     10a2:	ac 01       	movw	r20, r24
     10a4:	c7 01       	movw	r24, r14
