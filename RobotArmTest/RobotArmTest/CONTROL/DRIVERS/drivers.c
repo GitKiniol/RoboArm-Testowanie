@@ -216,7 +216,9 @@ void Driver_SetDriverParameters(move_t *move)
 void Driver_SetStepperParameters(stepper_driver_t *driver, uint8_t speed, uint8_t angle, uint8_t dir)
 {
 	Driver_SetStepperSpeed(driver, speed);												/* ustawienie prêdkoœci silnika				*/
-	driver->SetpointPosition = driver->Convert(angle, driver);							/* ustawienie pozycji zadanej				*/
+	dir ? 
+	(driver->SetpointPosition = driver->Convert((angle * -1), driver)) : 
+	(driver->SetpointPosition = driver->Convert(angle, driver));							/* ustawienie pozycji zadanej				*/
 	driver->Direction = dir;															/* ustawienie kierunku pracy				*/
 }
 
@@ -356,25 +358,14 @@ void Driver_EmergencyStop(void)
 
 void Driver_StepperTimerIsr(stepper_driver_t *driver)
 {
-	static uint8_t ar = 0;
-	static uint8_t br = 0;
-	static uint8_t cr = 0;
-	static uint8_t zr = 0;
-	
-	driver->Direction ? driver->CurrentPosition++ : driver->CurrentPosition--;		/* w zale¿noœci od kierunku obrotów, zwiêkszaj lub zmniejszaj wartoœæ pozycji aktualnej	*/
-	if (driver->CurrentPosition == driver->SetpointPosition || 
-		driver->CurrentPosition >= driver->MaximumPosition ||
-		driver->CurrentPosition <= driver->MinimumPosition)							/* jeœli osi¹gniêto pozycjê zadan¹ lub skrajn¹, to:										*/		
+	driver->Direction ? driver->CurrentPosition-- : driver->CurrentPosition++;		/* w zale¿noœci od kierunku obrotów, zwiêkszaj lub zmniejszaj wartoœæ pozycji aktualnej	*/
+	if (driver->CurrentPosition == driver->SetpointPosition)							/* jeœli osi¹gniêto pozycjê zadan¹ lub skrajn¹, to:										*/		
 	{
-		driver->Stop(driver);														/* zatrzymaj napêd																		*/
-		ar = axisA->IsRunning;
-		br = axisB->IsRunning;
-		cr = axisC->IsRunning;
-		zr = axisZ->IsRunning;	
-		if (ar == 0 && br == 0 && cr== 0 && zr == 0)								/* sprawdzenie czy jeszcze pracuje któraœ z osi, jeœli nie to:							*/
-		{
-			Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
-		}		
+		driver->Stop(driver);		
+		//if (ar == 0 && br == 0 && cr== 0 && zr == 0)								/* sprawdzenie czy jeszcze pracuje któraœ z osi, jeœli nie to:							*/
+		//{
+			//Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
+		//}		
 	}
 }
 
