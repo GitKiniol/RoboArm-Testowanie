@@ -45,7 +45,7 @@ typedef struct LIST_STRUCT										/* lista powi¹zana ruchów i mutiruchów						
 /*-------------------------------------------------Deklaracje zmiennych---------------------------------------------------------------------------------*/
 /* EXTERN:	*/
 extern list_t *Job;												/* lista zadañ utworzona z danych odebranych przez bluetooth z telefonu					*/
-
+extern move_t moves[3];											/* tablica ruchów - tylko do testów														*/
 /* LOCAL:	*/
 
 /*------------------------------------------------------------------------------------------------------------------------------------------------------*/
