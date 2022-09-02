@@ -21,7 +21,7 @@
 stepper_driver_t *axisA, *axisB, *axisC, *axisZ;		/* osie napêdzane silnikami krokowymi									*/
 servo_driver_t *axisG, *axisT;							/* osie napêdzane silnikami serwo										*/
 to_run_list_t *drvToRunList;							/* lista driverów przydzielona do zadania								*/
-
+int16_t cp = 0, sp = 0, mi = 0, mx = 0;
 /*------------------------------------------------------------------------------------------------------------------------------*/
 
 /*-------------------------------------------Definicje funkcji------------------------------------------------------------------*/
@@ -356,16 +356,31 @@ void Driver_EmergencyStop(void)
 	Driver_FreeAxes();
 }
 
+uint8_t Driver_IsAnyAxisRunning(void)
+{
+	uint8_t aar = axisA->IsRunning;
+	uint8_t abr = axisB->IsRunning;
+	uint8_t acr = axisC->IsRunning;
+	uint8_t azr = axisZ->IsRunning;
+	uint8_t sum;
+	sum = aar + abr + acr + azr;
+	return sum;
+}
+
 void Driver_StepperTimerIsr(stepper_driver_t *driver)
 {
+	cp = driver->CurrentPosition;
+	sp = driver->SetpointPosition;
+	mi = driver->MinimumPosition;
+	mx = driver->MaximumPosition;
 	driver->Direction ? driver->CurrentPosition-- : driver->CurrentPosition++;		/* w zale¿noœci od kierunku obrotów, zwiêkszaj lub zmniejszaj wartoœæ pozycji aktualnej	*/
-	if (driver->CurrentPosition == driver->SetpointPosition)							/* jeœli osi¹gniêto pozycjê zadan¹ lub skrajn¹, to:										*/		
+	if ((cp == sp) || (cp <= mi) || (cp >= mx))						/* jeœli osi¹gniêto pozycjê zadan¹ lub skrajn¹, to:										*/		
 	{
-		driver->Stop(driver);		
-		//if (ar == 0 && br == 0 && cr== 0 && zr == 0)								/* sprawdzenie czy jeszcze pracuje któraœ z osi, jeœli nie to:							*/
-		//{
-			//Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
-		//}		
+		driver->Stop(driver);				
+	}
+	if (!Driver_IsAnyAxisRunning())								/* sprawdzenie czy jeszcze pracuje któraœ z osi, jeœli nie to:							*/
+	{
+		Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
 	}
 }
 

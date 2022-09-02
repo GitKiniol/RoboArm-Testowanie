@@ -143,6 +143,8 @@ void Driver_EmergencyStop(void);
 
 void Driver_StepperTimerIsr(stepper_driver_t *driver);
 
+uint8_t Driver_IsAnyAxisRunning(void);
+
 /*--------------------------------------------------------------------------------------------------------------------------*/
 
 
