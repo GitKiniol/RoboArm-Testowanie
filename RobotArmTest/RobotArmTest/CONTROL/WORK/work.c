@@ -69,6 +69,7 @@ void Work_RunRobot(void)
 {
 	//Work_TimerInit(RunTaskTimer);												/* inicjalizacje timera														*/
 	//Work_TimerStart(RunTaskTimer);												/* uruchomienie timera														*/
+	Work_RunTask(Job, &HC05_SendStatus);
 }
 
 void Work_StopRobot(void)

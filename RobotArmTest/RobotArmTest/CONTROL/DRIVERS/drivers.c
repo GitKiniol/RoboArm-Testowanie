@@ -21,6 +21,7 @@
 stepper_driver_t *axisA, *axisB, *axisC, *axisZ;		/* osie napêdzane silnikami krokowymi									*/
 servo_driver_t *axisG, *axisT;							/* osie napêdzane silnikami serwo										*/
 to_run_list_t *drvToRunList;							/* lista driverów przydzielona do zadania								*/
+int16_t cp = 0, sp = 0, mi = 0, mx = 0;
 
 /*------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -34,10 +35,10 @@ void Driver_AxisInit(void)
 	//axisB = Driver_StepperDriverInit(axisB, &TCE1, &PORTE, 200, 16, 1);
 	//axisB->MaximumPosition = axisB->Convert(90, axisB);
 	//axisB->MinimumPosition = axisB->Convert(-90, axisB);
-	axisC = Driver_StepperDriverInit(axisC, &TCD1, &PORTD, 200, 16, 1);
+	axisC = Driver_StepperDriverInit(axisC, &TCD1, &PORTD, 200, 16, 8);
 	axisC->MaximumPosition = axisC->Convert(90, axisC);
 	axisC->MinimumPosition = axisC->Convert(-90, axisC);
-	axisZ = Driver_StepperDriverInit(axisZ, &TCC1, &PORTC, 200, 16, 1);
+	axisZ = Driver_StepperDriverInit(axisZ, &TCC1, &PORTC, 200, 16, 3);
 	axisZ->MaximumPosition = axisZ->Convert(90, axisZ);
 	axisZ->MinimumPosition = axisZ->Convert(-90, axisZ);
 	axisG = Driver_ServoDriverInit(axisG, &TCC0, &PORTC, 0);
@@ -356,27 +357,38 @@ void Driver_EmergencyStop(void)
 	Driver_FreeAxes();
 }
 
+uint8_t Driver_IsAnyAxisRunning(void)
+{
+	//uint8_t aar = axisA->IsRunning;
+	//uint8_t abr = axisB->IsRunning;
+	//uint8_t acr = axisC->IsRunning;
+	//uint8_t azr = axisZ->IsRunning;
+	//uint8_t sum;
+	//sum = aar + abr + acr + azr;
+	//return sum;
+	return axisZ->IsRunning + axisC->IsRunning;
+}
+
 void Driver_StepperTimerIsr(stepper_driver_t *driver)
 {
-	static uint8_t ar = 0;
-	static uint8_t br = 0;
-	static uint8_t cr = 0;
-	static uint8_t zr = 0;
-	
-	driver->Direction ? driver->CurrentPosition++ : driver->CurrentPosition--;		/* w zale¿noœci od kierunku obrotów, zwiêkszaj lub zmniejszaj wartoœæ pozycji aktualnej	*/
-	if (driver->CurrentPosition == driver->SetpointPosition || 
-		driver->CurrentPosition >= driver->MaximumPosition ||
-		driver->CurrentPosition <= driver->MinimumPosition)							/* jeœli osi¹gniêto pozycjê zadan¹ lub skrajn¹, to:										*/		
+	cp = driver->CurrentPosition;
+	sp = driver->SetpointPosition;
+	mi = driver->MinimumPosition;
+	mx = driver->MaximumPosition;
+	driver->Direction ? driver->CurrentPosition-- : driver->CurrentPosition++;		/* w zale?no?ci od kierunku obrotów, zwi?kszaj lub zmniejszaj warto?? pozycji aktualnej	*/
+	if ((cp == sp) || (cp <= mi) || (cp >= mx))						/* jeœli osi¹gniêto pozycjê zadan¹ lub skrajn?, to:										*/
 	{
-		driver->Stop(driver);														/* zatrzymaj napêd																		*/
-		ar = axisA->IsRunning;
-		br = axisB->IsRunning;
-		cr = axisC->IsRunning;
-		zr = axisZ->IsRunning;	
-		if (ar == 0 && br == 0 && cr== 0 && zr == 0)								/* sprawdzenie czy jeszcze pracuje któraœ z osi, jeœli nie to:							*/
+		driver->Stop(driver);
+	}
+	if (!Driver_IsAnyAxisRunning())								/* sprawdzenie czy jeszcze pracuje która? z osi, je?li nie to:							*/
+	{
+		static uint8_t i = 0;
+		i++;
+		if (i > 222)
 		{
-//			Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa siê to poprzez uruchomienie timera taktuj¹cego		*/
-		}		
+			i = 0;
+		}
+		//Work_TimerStart(RunTaskTimer);											/* uruchom kolejne zadanie, odbywa si? to poprzez uruchomienie timera taktuj?cego		*/
 	}
 }
 

@@ -134,16 +134,6 @@ void Data_InsertMoveToJob(list_t *job, frame_t *frame)
 	
 	/* funkcja umieszcza w zagnie¿d¿onej liœcie dane ruchu osi */
 	Data_InsertElementToList(job->Head->Data, Data_CreateListElement(Data_CreateMove(*frame->Data1, atoi(frame->Data2), atoi(frame->Data3), atoi(frame->Data4)), NULL));
-
-	if(job->Count >= 3)
-	{
-		r = Work_GetParameters(job);
-		Driver_RunTaskAxes();
-		r = Work_GetParameters(job);
-		Driver_RunTaskAxes();
-		r = Work_GetParameters(job);
-		Driver_RunTaskAxes();
-	}
 }
 
 void Data_InsertTaskToJob(list_t *job, frame_t *frame, uint8_t islastmove)
